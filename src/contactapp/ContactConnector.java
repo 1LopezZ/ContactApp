@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ArrayList;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -33,45 +34,63 @@ public class ContactConnector {
         System.out.println(getContacts());
     }
 
-    public static String getContacts() {
+    public static Contact[] getContacts() {
 
         try {
+            Contact[] res = null;
             URL url = new URL("http://localhost:3000/getContacts");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 
             System.out.println("GETTING CONTACTS...");
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                return "Error";
+                return null;
             }
             else {
                 System.out.println("PROCESSING CONTACTS...");
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String[] res = getRes(in);
+                res = getRes(in);
             }
-            return "Success";
-
+            return res;
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error";
+            return null;
         }
     }
 
-    public static String[] getRes(BufferedReader in) {
-        ArrayList res = new ArrayList();
+    public static Contact[] getRes(BufferedReader in) {
+        JSONObject res = null;
+        Contact[] contacts;
         try {
             String inputLine = in.readLine();
             while (inputLine != null) {
-                res.add(inputLine);
+                res = new JSONObject(inputLine);
                 System.out.println(inputLine);
                 inputLine = in.readLine();
             }
             in.close();
+            if(res != null) {
+                JSONArray array = res.getJSONArray("contacts");
+                contacts = new Contact[array.length()];
+                for(int i = 0 ; i < array.length() ; i++){
+                    JSONObject tmp = array.getJSONObject(i);
+                    String firstname = tmp.getString("firstname");
+                    String lastname = tmp.getString("lastname");
+                    String phoneno = tmp.getString("phoneno");
+                    String email = tmp.getString("email");
+                    contacts[i] = new Contact(firstname,lastname,phoneno,email);
+                    System.out.println(contacts[i].getNames());
+                }
+                return contacts;
+            }
+            else {
+                return null;
+            }
         }
         catch (Exception e){
             System.out.println(e);
-        }
-        return (String[]) res.toArray();
+            return null;
+        } 
     }
 
     public static String createQueryString(HashMap param) throws Exception {

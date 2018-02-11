@@ -16,13 +16,15 @@ public class ContactManager {
     private static Contact[] contacts;
     private static String[] names;
     private static int max;
+    private static ContactConnector connector;
     
     public ContactManager() {
-        max = 5;
+        max = 20;
         contacts = new Contact[max];
         names = new String[max];
         curSelected = 0;
         curPos = 0;
+        connector = new ContactConnector();
     }
     
     /**
@@ -62,6 +64,16 @@ public class ContactManager {
             }
         }
         return getAllNames();
+    }
+    
+    public static String[] getPrvContacts() {
+        Contact[] tmp = connector.getContacts();
+        for(int i = 0; i < tmp.length; i++) {
+            contacts[i] = tmp[i];
+            names[i] = contacts[i].getNames();
+        }
+        curPos = tmp.length;
+        return names;
     }
     
     public static String[] getAllNames() {

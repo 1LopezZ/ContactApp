@@ -18,6 +18,7 @@ public class ContactFrame extends javax.swing.JFrame {
     public ContactFrame(ContactManager manager) {
         this.manager = manager;
         initComponents();
+        contactList.setListData(manager.getPrvContacts());
     }
 
     /**
