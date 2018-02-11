@@ -21,15 +21,23 @@ import org.json.JSONObject;
  * @author lopezz
  */
 public class ContactConnector {
+    
+    static String hostName;
+    
+    public ContactConnector() {
+        hostName = "https://node-postgres-contacts-obnyymjatr.now.sh";
+    }
+    
     public static void main(String[] params) {
         System.out.println("RUNNING");
         System.out.println(getContacts());
+        
     }
     
     public static void postContact(Contact contact, int pos) {
         try {
             Contact[] res = null;
-            URL url = new URL("http://localhost:3000/postContact");
+            URL url = new URL(hostName+"/postContact");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
@@ -55,7 +63,7 @@ public class ContactConnector {
 
         try {
             Contact[] res = null;
-            URL url = new URL("http://localhost:3000/getContacts");
+            URL url = new URL(hostName+"/getContacts");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 
@@ -140,7 +148,7 @@ public class ContactConnector {
         System.out.println("DELETING OLD CONTACTS...");
         try {
             Contact[] res = null;
-            URL url = new URL("http://localhost:3000/resetContacts");
+            URL url = new URL(hostName+"/resetContacts");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("DELETE");
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -158,7 +166,7 @@ public class ContactConnector {
     void updateContact(Contact contact, int pos) {
         try {
             Contact[] res = null;
-            URL url = new URL("http://localhost:3000/updateContact");
+            URL url = new URL(hostName+"/updateContact");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
