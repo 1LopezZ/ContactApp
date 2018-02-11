@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ArrayList;
+import org.json.JSONObject;
 
 /**
  *
@@ -29,31 +30,24 @@ import java.util.ArrayList;
 public class ContactConnector {
     public static void main(String[] params) {
         System.out.println("RUNNING");
-        System.out.println(getUsers());
+        System.out.println(getContacts());
     }
-    
-    public static String getUsers() {
+
+    public static String getContacts() {
+
         try {
-            System.out.println("CONNECTING TO LOCAL HOST...");
-            URL url = new URL("http://localhost:3000/users/getID");
+            URL url = new URL("http://localhost:3000/getContacts");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
 
-            System.out.println("GETTING ID ...");
-            OutputStream os = conn.getOutputStream();
+            System.out.println("GETTING CONTACTS...");
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                os.flush();
-                os.close();
                 return "Error";
             }
             else {
-                System.out.println("PROCESSING ID ...");
+                System.out.println("PROCESSING CONTACTS...");
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String[] res = getRes(in);
-                os.flush();
-                os.close();
             }
             return "Success";
 
@@ -62,7 +56,7 @@ public class ContactConnector {
             return "Error";
         }
     }
-    
+
     public static String[] getRes(BufferedReader in) {
         ArrayList res = new ArrayList();
         try {
@@ -79,7 +73,7 @@ public class ContactConnector {
         }
         return (String[]) res.toArray();
     }
-    
+
     public static String createQueryString(HashMap param) throws Exception {
 
         StringBuilder result = new StringBuilder();

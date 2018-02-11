@@ -164,14 +164,24 @@ public class ContactMaker extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void confirmBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmBtnActionPerformed
-        String[] contacts = ContactManager.makeContact(
+        if(
+            firstNameEntry.getText().equals("") || 
+            lastNameEntry.getText().equals("") ||
+            phoneNoEntry.getText().equals("") ||
+            emailEntry.getText().equals("")
+            ) {
+            statusLabel.setText("A field is empty.");
+        }
+        else {
+            String[] contacts = ContactManager.makeContact(
                 firstNameEntry.getText(),
                 lastNameEntry.getText(),
                 phoneNoEntry.getText(),
                 emailEntry.getText()
                 );
-        frame.updateContacts(contacts);
-        this.setVisible(false);
+            frame.updateContacts(contacts);
+            this.setVisible(false);
+        }
     }//GEN-LAST:event_confirmBtnActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
