@@ -103,5 +103,37 @@ public class ContactManager {
         curPos = curPos - 1;
         return "Deleted "+tmp;
     }
+
+    public static String updateCancelled() {
+        if(getEditState() == 1) {
+            return "Editing contact cancelled.";
+        }
+        else if(getEditState() == 0){
+            return "Adding contact cancelled.";
+        }
+        else {
+            return "Contact App";
+        }
+    }
+
+    String updateSuccess() {
+        if(getEditState() == 1) {
+            connector.updateContact(contacts[curSelected],curSelected+1);
+            return "A contact has been edited.";
+        }
+        else if(getEditState() == 0){
+            connector.postContact(contacts[curPos-1],curPos);
+            return "A contact has been added.";
+        }
+        else {
+            connector.deleteContact();
+            for(int i = 0; i < 20; i++) {
+                if(contacts[i] != null) {
+                    connector.postContact(contacts[i],i+1);
+                }
+            }
+            return "Contact App";
+        }
+    }
     
 }

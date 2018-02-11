@@ -5,22 +5,14 @@
  */
 package contactapp;
 
-import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.OutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,6 +24,31 @@ public class ContactConnector {
     public static void main(String[] params) {
         System.out.println("RUNNING");
         System.out.println(getContacts());
+    }
+    
+    public static void postContact(Contact contact, int pos) {
+        try {
+            Contact[] res = null;
+            URL url = new URL("http://localhost:3000/postContact");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            System.out.println("POSTING CONTACT...");
+            OutputStream os = conn.getOutputStream();
+            os.write(contact.getQuery(pos).getBytes());
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println("ERROR");
+            }
+            else {
+                System.out.println("SUCCESS");
+            }
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static Contact[] getContacts() {
@@ -117,5 +134,49 @@ public class ContactConnector {
 
         }
         return result.toString();
+    }
+
+    void deleteContact() {
+        System.out.println("DELETING OLD CONTACTS...");
+        try {
+            Contact[] res = null;
+            URL url = new URL("http://localhost:3000/resetContacts");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("DELETE");
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println("ERROR");
+            }
+            else {
+                System.out.println("SUCCESS");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ERROR");
+        }
+    }
+
+    void updateContact(Contact contact, int pos) {
+        try {
+            Contact[] res = null;
+            URL url = new URL("http://localhost:3000/updateContact");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            System.out.println("UPDATING CONTACT...");
+            OutputStream os = conn.getOutputStream();
+            os.write(contact.getQuery(pos).getBytes());
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println("ERROR");
+            }
+            else {
+                System.out.println("SUCCESS");
+            }
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -247,9 +247,10 @@ public class ContactFrame extends javax.swing.JFrame {
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
         if(contactList.getSelectedIndex() != -1 && contactList.getSelectedIndex() < manager.getCurPos()) {
-            statusLabel.setText(manager.deleteContact());
+            String deleted = manager.deleteContact();
             manager.setEditState("DELETE");
             updateContacts(manager.getAllNames());
+            statusLabel.setText(deleted);
             contactList.clearSelection();
             firstNameEntry.setText("N/A");
             lastNameEntry.setText("N/A");
@@ -295,23 +296,12 @@ public class ContactFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_contactListMouseWheelMoved
 
     public void updateContacts(String[] contacts) {
+        statusLabel.setText(manager.updateSuccess());
         contactList.setListData(contacts);
-        if(manager.getEditState() == 1) {
-            statusLabel.setText("A contact has been edited.");
-        }
-        else if(manager.getEditState() == 0){
-            statusLabel.setText("A contact has been added.");
-        }
     }
     
     public void cancelChange() {
-        if(manager.getEditState() == 1) {
-            statusLabel.setText("Editing contact cancelled.");
-        }
-        else if(manager.getEditState() == 0){
-            contactList.clearSelection();
-            statusLabel.setText("Adding contact cancelled.");
-        }
+        statusLabel.setText(manager.updateCancelled());
     }
     
     
