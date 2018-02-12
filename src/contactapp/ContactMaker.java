@@ -170,9 +170,11 @@ public class ContactMaker extends javax.swing.JFrame {
             phoneNoEntry.getText().equals("") ||
             emailEntry.getText().equals("")
             ) {
+            //PRECONDITIONS NOT MET
             statusLabel.setText("A field is empty.");
         }
         else {
+            //CREATING A CONTACT
             String[] contacts = ContactManager.makeContact(
                 firstNameEntry.getText(),
                 lastNameEntry.getText(),
@@ -185,6 +187,7 @@ public class ContactMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_confirmBtnActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
+        //CLOSING FRAME
         frame.cancelChange();
         this.setVisible(false);
     }//GEN-LAST:event_cancelBtnActionPerformed

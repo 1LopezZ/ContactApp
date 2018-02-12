@@ -7,7 +7,6 @@ package contactapp;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,14 +20,26 @@ class Contact {
     private String phoneNo;
     private String email;
     
-    public Contact(String firstName, String lastName, String phoneNo, String email) {
+    public Contact(
+            String firstName, 
+            String lastName, 
+            String phoneNo, 
+            String email
+    ) {
+        //INSTANTIATING CONTACTS
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNo = phoneNo;
         this.email = email;
     }
     
-    public void editContact(String firstName, String lastName, String phoneNo, String email) {
+    public void editContact(
+            String firstName, 
+            String lastName, 
+            String phoneNo, 
+            String email
+    ) {
+        //EDITING ALL CONTACTS VALUES
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNo = phoneNo;
@@ -36,10 +47,12 @@ class Contact {
     }
 
     public String getNames() {
+        //RETURN CONTACT NAMES FOR NAMES LIST
         return lastName + ", " + firstName;
     }
     
     public String[] getAll() {
+        //RETURN CONTACT VALUES TO BE DISPLAYED ON FRAME
         String[] tmp = new String[4];
         tmp[0] = firstName;
         tmp[1] = lastName;
@@ -51,6 +64,7 @@ class Contact {
     public String getQuery(int pos) {
         StringBuilder result = new StringBuilder();
         try {
+            //CREATES A STRING QUERY TO BE PASSED AS HTTP REQUEST
             result.append(URLEncoder.encode("id", "UTF-8"));
             result.append("=");
             result.append(URLEncoder.encode(String.valueOf(pos), "UTF-8"));

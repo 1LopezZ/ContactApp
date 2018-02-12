@@ -5,6 +5,8 @@
  */
 package contactapp;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author lopezz
@@ -230,28 +232,35 @@ public class ContactFrame extends javax.swing.JFrame {
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         if(manager.getCurPos() < manager.getMax()) {
+            //CREATE EXTERNAL FRAME FOR CREATING CONTACT
             ContactManager.setEditState("CREATE");
             ContactMaker maker = new ContactMaker(this);
+            maker.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             maker.setVisible(true);
         }
         else {
+            //PRECONDITION NOT MET
             statusLabel.setText("Maximum contacts reached.");
         }
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         if(contactList.getSelectedIndex() != -1 && contactList.getSelectedIndex() < manager.getCurPos()) {
+            //CREATE EXTERNAL FRAM FOR EDITING CONTACT
             ContactManager.setEditState("EDIT");
             ContactMaker maker = new ContactMaker(this);
+            maker.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             maker.setVisible(true);
         }
         else {
+            //PRECONDITION NOT MET
             statusLabel.setText("Select contact to edit.");
         }
     }//GEN-LAST:event_editBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
         if(contactList.getSelectedIndex() != -1 && contactList.getSelectedIndex() < manager.getCurPos()) {
+            //MAKE MANAGER DELETE CONTACT
             String deleted = manager.deleteContact();
             manager.setEditState("DELETE");
             updateContacts(manager.getAllNames());
@@ -263,12 +272,14 @@ public class ContactFrame extends javax.swing.JFrame {
             emailEntry.setText("N/A");
         }
         else {
+            //PRECONDITION NOT MET
             statusLabel.setText("Select contact to delete.");
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void contactListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_contactListValueChanged
         if(contactList.getSelectedIndex() == -1 ||  contactList.getSelectedIndex() > manager.getCurPos()-1) {
+            //NOTHING SELECTED FROM LIST
             ContactManager.setCurSelected(-1);
             firstNameEntry.setText("N/A");
             lastNameEntry.setText("N/A");
@@ -277,6 +288,7 @@ public class ContactFrame extends javax.swing.JFrame {
             contactList.clearSelection();
         }
         else {
+            //UPDATE TEXT FIELDS WHEN SOMETHING IS SELECTED
             ContactManager.setCurSelected(contactList.getSelectedIndex());
             String[] tmp = manager.getCurData();
             firstNameEntry.setText(tmp[0]);
@@ -301,13 +313,15 @@ public class ContactFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_contactListMouseWheelMoved
 
     public void updateContacts(String[] contacts) {
-        statusLabel.setText(manager.updateSuccess());
+        statusLabel.setText(manager.updateSuccess()); //UPDATE DB
         if(!statusLabel.getText().equals("Error -- Contacts Reset")) {
+            //ERROR HANDLING
             contactList.setListData(contacts);
         }
     }
     
     public void cancelChange() {
+        //UPDATE STATUS LABEL
         statusLabel.setText(manager.updateCancelled());
     }
     
