@@ -18,7 +18,12 @@ public class ContactFrame extends javax.swing.JFrame {
     public ContactFrame(ContactManager manager) {
         this.manager = manager;
         initComponents();
-        contactList.setListData(manager.getPrvContacts());
+        try {
+            contactList.setListData(manager.getPrvContacts());
+        }
+        catch (RuntimeException e) {
+            throw e;
+        }
     }
 
     /**
@@ -297,7 +302,9 @@ public class ContactFrame extends javax.swing.JFrame {
 
     public void updateContacts(String[] contacts) {
         statusLabel.setText(manager.updateSuccess());
-        contactList.setListData(contacts);
+        if(!statusLabel.getText().equals("Error -- Contacts Reset")) {
+            contactList.setListData(contacts);
+        }
     }
     
     public void cancelChange() {

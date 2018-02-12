@@ -56,6 +56,7 @@ public class ContactConnector {
             os.close();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new java.lang.RuntimeException("SERVER OFFLINE");
         }
     }
 
@@ -79,7 +80,7 @@ public class ContactConnector {
             return res;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new java.lang.RuntimeException("SERVER OFFLINE");
         }
     }
 
@@ -159,11 +160,11 @@ public class ContactConnector {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("ERROR");
+            throw new java.lang.RuntimeException("SERVER OFFLINE");
         }
     }
 
-    void updateContact(Contact contact, int pos) {
+    void updateContact(Contact contact, int pos) throws RuntimeException {
         try {
             Contact[] res = null;
             URL url = new URL(hostName+"/updateContact");
@@ -185,6 +186,7 @@ public class ContactConnector {
             os.close();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new java.lang.RuntimeException("SERVER OFFLINE");
         }
     }
 }

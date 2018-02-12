@@ -67,13 +67,18 @@ public class ContactManager {
     }
     
     public static String[] getPrvContacts() {
-        Contact[] tmp = connector.getContacts();
-        for(int i = 0; i < tmp.length; i++) {
-            contacts[i] = tmp[i];
-            names[i] = contacts[i].getNames();
+        try {
+            Contact[] tmp = connector.getContacts();
+            for(int i = 0; i < tmp.length; i++) {
+                contacts[i] = tmp[i];
+                names[i] = contacts[i].getNames();
+            }
+            curPos = tmp.length;
+            return names;
         }
-        curPos = tmp.length;
-        return names;
+        catch (RuntimeException e) {
+            throw e;
+        }
     }
     
     public static String[] getAllNames() {
@@ -117,22 +122,28 @@ public class ContactManager {
     }
 
     String updateSuccess() {
-        if(getEditState() == 1) {
-            connector.updateContact(contacts[curSelected],curSelected+1);
-            return "A contact has been edited.";
-        }
-        else if(getEditState() == 0){
-            connector.postContact(contacts[curPos-1],curPos);
-            return "A contact has been added.";
-        }
-        else {
-            connector.deleteContact();
-            for(int i = 0; i < 20; i++) {
-                if(contacts[i] != null) {
-                    connector.postContact(contacts[i],i+1);
-                }
+        try {
+            if(getEditState() == 1) {
+                connector.updateContact(contacts[curSelected],curSelected+1);
+                return "A contact has been edited.";
             }
-            return "Contact App";
+            else if(getEditState() == 0){
+                connector.postContact(contacts[curPos-1],curPos);
+                return "A contact has been added.";
+            }
+            else {
+                connector.deleteContact();
+                for(int i = 0; i < 20; i++) {
+                    if(contacts[i] != null) {
+                        connector.postContact(contacts[i],i+1);
+                    }
+                }
+                return "Contact App";
+            }
+        }
+        catch (RuntimeException e) {
+            getPrvContacts();
+            return "Error -- Contacts Reset";
         }
     }
     
